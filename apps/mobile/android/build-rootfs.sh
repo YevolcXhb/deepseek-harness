@@ -24,7 +24,8 @@ IDX="$WORK/Packages"
 curl -fsSL "$BASE/dists/stable/main/binary-aarch64/Packages" -o "$IDX"
 PKGS="proot libtalloc libandroid-shmem nodejs busybox openssl libicu libc++ libsqlite zlib libffi c-ares"
 for p in $PKGS; do
-  FN="$(awk -v pat="^Package: ${p}\$" 'BEGIN{RS=""} $0 ~ pat { if (match($0, /Filename: [^\n]+/)) print substr($0, RSTART+10, RLENGTH-10); exit }' "$IDX")"
+  FN="$(grep -A30 "^Package: ${p}\$" "$IDX" | grep -m1 '^Filename: ' | cut -d' ' -f2)"
+  [ -n "$FN" ] || { echo "ERROR: package $p not found in index" >&2; exit 1; }
   echo "  $p -> $FN"
   curl -fsSL "$BASE/$FN" -o "$WORK/$(basename "$FN" | tr ':' '_')"
 done
