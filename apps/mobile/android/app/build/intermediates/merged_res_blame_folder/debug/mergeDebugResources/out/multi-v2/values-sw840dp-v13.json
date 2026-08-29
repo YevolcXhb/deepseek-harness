@@ -1,0 +1,26 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.dsh.mobile.app-mergeDebugResources-36:/values-sw840dp-v13/values-sw840dp-v13.xml",
+            "map": [
+                {
+                    "source": "/root/workspace/deepseek-harness/apps/mobile/android/app/src/main/res/values-sw840dp/dimens.xml",
+                    "from": {
+                        "startLines": "2,4,3",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,153,104",
+                        "endColumns": "48,53,48",
+                        "endOffsets": "99,202,148"
+                    },
+                    "to": {
+                        "startLines": "2,3,4",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,104,158",
+                        "endColumns": "48,53,48",
+                        "endOffsets": "99,153,202"
+                    }
+                }
+            ]
+        }
+    ]
+}

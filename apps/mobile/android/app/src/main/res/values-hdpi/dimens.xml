@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="splash_logo_size">72dp</dimen>
+    <dimen name="splash_progress_width">280dp</dimen>
+    <dimen name="keepalive_badge_text">12sp</dimen>
+</resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme (follows system dark mode) -->
+    <style name="Theme.DshMobile" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/dsh_accent</item>
+        <item name="colorPrimaryDark">@color/dsh_accent_dark</item>
+        <item name="colorOnPrimary">@color/bg_light</item>
+        <item name="android:windowBackground">@color/splash_bg</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+    </style>
+</resources>

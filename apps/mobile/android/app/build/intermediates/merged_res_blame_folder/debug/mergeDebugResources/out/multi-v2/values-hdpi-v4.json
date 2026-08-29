@@ -1,0 +1,45 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.dsh.mobile.app-mergeDebugResources-36:/values-hdpi-v4/values-hdpi-v4.xml",
+            "map": [
+                {
+                    "source": "/root/workspace/deepseek-harness/apps/mobile/android/app/src/main/res/values-hdpi/dimens.xml",
+                    "from": {
+                        "startLines": "4,2,3",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "157,55,103",
+                        "endColumns": "51,47,53",
+                        "endOffsets": "204,98,152"
+                    },
+                    "to": {
+                        "startLines": "2,3,4",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,107,155",
+                        "endColumns": "51,47,53",
+                        "endOffsets": "102,150,204"
+                    }
+                },
+                {
+                    "source": "/root/.gradle/caches/transforms-4/316503c5dcc4c8b61b00057b23c73fda/transformed/appcompat-1.6.1/res/values-hdpi-v4/values-hdpi-v4.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "6",
+                        "endColumns": "13",
+                        "endOffsets": "327"
+                    },
+                    "to": {
+                        "startLines": "5",
+                        "startColumns": "4",
+                        "startOffsets": "209",
+                        "endLines": "9",
+                        "endColumns": "13",
+                        "endOffsets": "481"
+                    }
+                }
+            ]
+        }
+    ]
+}
