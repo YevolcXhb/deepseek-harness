@@ -43,4 +43,17 @@ class DshWebInterface(private val context: Context) {
         val pid = DshKeepAliveBridge.getMonitoredPid()
         return """{"alive":$alive,"port":$port,"pid":$pid}"""
     }
+
+    @JavascriptInterface
+    fun getApiKey(): String {
+        return getSharedPrefs().getString(DshApplication.PREF_API_KEY, "") ?: ""
+    }
+
+    @JavascriptInterface
+    fun setApiKey(key: String) {
+        getSharedPrefs().edit().putString(DshApplication.PREF_API_KEY, key).apply()
+    }
+
+    private fun getSharedPrefs() =
+        context.getSharedPreferences(DshApplication.PREFS_NAME, Context.MODE_PRIVATE)
 }

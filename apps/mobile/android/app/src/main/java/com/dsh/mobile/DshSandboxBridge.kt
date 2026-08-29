@@ -31,6 +31,10 @@ class DshSandboxBridge {
         val workspace = DshApplication.WORKSPACE_DIR
         val prootBin = DshApplication.PROOT_BIN
 
+        // 首次进入无 key 时注入占位符，保证 dsh 能正常启动进入 Web UI；
+        // 用户可在 Web UI 设置页手动配置真实 API Key 后重启生效。
+        val effectiveApiKey = if (apiKey.isEmpty()) "dsh-mobile-keyless" else apiKey
+
         val cmd = mutableListOf<String>().apply {
             add(prootBin)
             add("-r"); add(rootfs)
@@ -44,7 +48,7 @@ class DshSandboxBridge {
             add("-e"); add("DSH_HOME=/home/.dsh")
             add("-e"); add("DSH_PLATFORM=android")
             add("-e"); add("DSH_PROOT=1")
-            add("-e"); add("DEEPSEEK_API_KEY=$apiKey")
+            add("-e"); add("DEEPSEEK_API_KEY=$effectiveApiKey")
             add("-e"); add("PATH=/usr/bin:/bin:/usr/sbin:/sbin")
             add("-e"); add("NODE_OPTIONS=--max-old-space-size=256")
             add("--")
@@ -62,7 +66,7 @@ class DshSandboxBridge {
             environment()["HOME"] = "/home"
             environment()["DSH_HOME"] = "/home/.dsh"
             environment()["DSH_PLATFORM"] = "android"
-            environment()["DEEPSEEK_API_KEY"] = apiKey
+            environment()["DEEPSEEK_API_KEY"] = effectiveApiKey
         }
 
         prootProcess = pb.start()

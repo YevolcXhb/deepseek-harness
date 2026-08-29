@@ -115,10 +115,9 @@ class DshMainActivity : AppCompatActivity() {
 
                 val apiKey = getSharedPreferences(DshApplication.PREFS_NAME, MODE_PRIVATE)
                     .getString(DshApplication.PREF_API_KEY, "") ?: ""
-                if (apiKey.isEmpty()) {
-                    runOnUiThread { statusText.text = getString(R.string.status_no_api_key) }
-                    return@Thread
-                }
+
+                // 首次进入无需强制配置 API Key；用户可在设置中手动配置。
+                // 即使 key 为空，也启动容器进入 Web UI。
 
                 runOnUiThread {
                     statusText.text = getString(R.string.status_starting_engine)
