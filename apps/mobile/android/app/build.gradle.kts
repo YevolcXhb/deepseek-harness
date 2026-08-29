@@ -14,7 +14,8 @@ android {
         versionCode = 1
         versionName = "1.0.0"
         ndk {
-            abiFilters += listOf("arm64-v8a", "x86_64", "armeabi-v7a", "x86")
+            // 仅 arm64：rootfs 内 node/proot 均为 aarch64，其它 ABI 无法运行
+            abiFilters += listOf("arm64-v8a")
         }
     }
 
@@ -31,6 +32,12 @@ android {
     // Do not compress .gz files (rootfs tar.gz)
     androidResources {
         noCompress.addAll(listOf("gz", "tar.gz"))
+    }
+    // 安装时提取 jniLibs 到 nativeLibraryDir（Android 10+ W^X 下唯一可 exec 的位置）
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
+        }
     }
 
     compileOptions {

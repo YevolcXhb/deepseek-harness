@@ -29,7 +29,7 @@ class DshSandboxBridge {
     fun launch(apiKey: String): LaunchResult {
         val rootfs = DshApplication.ROOTFS_DIR
         val workspace = DshApplication.WORKSPACE_DIR
-        val prootBin = DshApplication.PROOT_BIN
+        val prootBin = DshApplication.prootBin
 
         // 首次进入无 key 时注入占位符，保证 dsh 能正常启动进入 Web UI；
         // 用户可在 Web UI 设置页手动配置真实 API Key 后重启生效。
@@ -41,16 +41,12 @@ class DshSandboxBridge {
             add("-b"); add("/dev")
             add("-b"); add("/proc")
             add("-b"); add("/sys")
+            add("-b"); add("/system")
             add("-b"); add("$workspace:/workspace")
             add("-w"); add("/workspace")
             add("-i"); add("0:0")
-            add("-e"); add("HOME=/home")
-            add("-e"); add("DSH_HOME=/home/.dsh")
-            add("-e"); add("DSH_PLATFORM=android")
-            add("-e"); add("DSH_PROOT=1")
-            add("-e"); add("DEEPSEEK_API_KEY=$effectiveApiKey")
-            add("-e"); add("PATH=/usr/bin:/bin:/usr/sbin:/sbin")
-            add("-e"); add("NODE_OPTIONS=--max-old-space-size=256")
+            // Termux proot 无 -e/--env 选项：环境变量经 ProcessBuilder 继承进 guest
+            add("--kill-on-exit")
             add("--")
             add("/usr/bin/node")
             add("/usr/lib/dsh/apps/cli/lib/bin.js")
@@ -67,8 +63,16 @@ class DshSandboxBridge {
             environment()["DSH_HOME"] = "/home/.dsh"
             environment()["DSH_PLATFORM"] = "android"
             environment()["DEEPSEEK_API_KEY"] = effectiveApiKey
-            // proot 依赖库路径
-            environment()["LD_LIBRARY_PATH"] = DshApplication.LIB_DIR
+            environment()["DSH_PROOT"] = "1"
+            environment()["PATH"] = "/usr/bin:/bin:/usr/sbin:/sbin"
+            environment()["NODE_OPTIONS"] = "--max-old-space-size=256"
+            environment()["TMPDIR"] = "/tmp"
+            environment()["PROOT_NO_SECCOMP"] = "1"
+            // 宿主侧：proot 需要 libtalloc.so.2 / libandroid-shmem.so（位于 nativeLibDir，
+            // libtalloc.so.2 缺失时由 files/lib 中的符号链接兜底）
+            // guest 侧：node 等 Termux 二进制的依赖库在 rootfs 内 /usr/lib
+            environment()["LD_LIBRARY_PATH"] =
+                "${DshApplication.nativeLibDir}:${DshApplication.LIB_DIR}:/usr/lib"
         }
 
         prootProcess = pb.start()
