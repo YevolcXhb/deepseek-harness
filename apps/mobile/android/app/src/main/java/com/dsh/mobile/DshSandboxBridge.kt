@@ -86,7 +86,7 @@ class DshSandboxBridge {
         }
 
         dshPort = port
-        dshPid = prootProcess!!.pid()
+        dshPid = getProcessId(prootProcess!!)
         Log.i(TAG, "dsh started: pid=$dshPid, port=$dshPort")
         return LaunchResult(pid = dshPid, port = dshPort)
     }
@@ -102,6 +102,27 @@ class DshSandboxBridge {
         prootProcess = null
         dshPort = 0
         dshPid = 0
+    }
+
+    /**
+     * Extract the PID from a Java Process using reflection.
+     * Android's Process lacks a public pid() method (Java 9+ API).
+     */
+    private fun getProcessId(process: Process): Int {
+        return try {
+            val field = process.javaClass.getDeclaredField("pid")
+            field.isAccessible = true
+            try {
+                field.getInt(process)
+            } catch (e: IllegalAccessException) {
+                val method = process.javaClass.getMethod("pid")
+                method.isAccessible = true
+                method.invoke(process) as Int
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to get pid via reflection, using /proc fallback")
+            0
+        }
     }
 
     data class LaunchResult(val pid: Int, val port: Int)

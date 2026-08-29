@@ -118,7 +118,7 @@ class DshKeepAliveService : Service() {
     private fun requestBatteryOptimizationExemption() {
         try {
             val intent = Intent(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
-                data = android.Uri.parse("package:$packageName")
+                data = android.net.Uri.parse("package:$packageName")
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
             startActivity(intent)
