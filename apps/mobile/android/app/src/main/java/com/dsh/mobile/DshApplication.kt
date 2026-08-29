@@ -29,6 +29,7 @@ class DshApplication : Application() {
         const val PROOT_BIN = "$FILES_DIR/proot"
         const val ROOTFS_DIR = "$FILES_DIR/rootfs"
         const val WORKSPACE_DIR = "$FILES_DIR/workspace"
+        const val LIB_DIR = "$FILES_DIR/lib"
         const val KEEPALIVE_PORT_FILE = "$FILES_DIR/keepalive.port"
         const val PREFS_NAME = "dsh"
         const val PREF_API_KEY = "api_key"
@@ -68,7 +69,7 @@ class DshApplication : Application() {
     }
 
     private fun ensureDirectories() {
-        listOf(FILES_DIR, ROOTFS_DIR, WORKSPACE_DIR, "$ROOTFS_DIR/home/.dsh").forEach { dir ->
+        listOf(FILES_DIR, ROOTFS_DIR, WORKSPACE_DIR, LIB_DIR, "$ROOTFS_DIR/home/.dsh").forEach { dir ->
             java.io.File(dir).mkdirs()
         }
     }
@@ -95,6 +96,21 @@ class DshApplication : Application() {
                 prootFile.setExecutable(true, false)
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to release proot binary", e)
+            }
+        }
+
+        // Release proot 依赖库 (libtalloc, libandroid-shmem)
+        val libFiles = listOf("libtalloc.so.2.4.3", "libtalloc.so.2", "libandroid-shmem.so")
+        for (libName in libFiles) {
+            val libFile = java.io.File("$LIB_DIR/$libName")
+            if (!libFile.exists()) {
+                try {
+                    assets.open("lib/$libName").use { input ->
+                        libFile.outputStream().use { output -> input.copyTo(output) }
+                    }
+                } catch (e: Exception) {
+                    Log.e(TAG, "Failed to release lib: $libName", e)
+                }
             }
         }
 

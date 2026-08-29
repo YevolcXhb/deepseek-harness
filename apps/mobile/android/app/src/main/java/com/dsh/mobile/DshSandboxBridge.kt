@@ -67,6 +67,8 @@ class DshSandboxBridge {
             environment()["DSH_HOME"] = "/home/.dsh"
             environment()["DSH_PLATFORM"] = "android"
             environment()["DEEPSEEK_API_KEY"] = effectiveApiKey
+            // proot 依赖库路径
+            environment()["LD_LIBRARY_PATH"] = DshApplication.LIB_DIR
         }
 
         prootProcess = pb.start()
